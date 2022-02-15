@@ -1,4 +1,3 @@
-from nbformat import write
 from reportlab.pdfgen import canvas
 
 A4 = [841, 595]
