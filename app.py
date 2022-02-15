@@ -3,10 +3,13 @@ import pandas as pd
 
 #Tamaño de hojas
 A4 = [841, 595]
-A5 = [595, 420]
+A4Carpeta = [595, 841]
 
 weight = 841
 height = 595
+
+weight2 = 595
+height2 = 841
 
 #Input a traves de un archivo de Excel
 
@@ -26,7 +29,7 @@ status = df["MO sts"].values
 
 for line in range(len(mo)):
     if status[line] != "90-90":
-        moFloat = f"MO: {mo[line]}"
+        moFloat = f"MO: {mo[line]:.0f}"
         #Creación de cartel para puertas y paneles
         pdf_Puertas = canvas.Canvas(co[line] + "_" + "PUERTAS" + ".pdf", pagesize=A4)
 
@@ -56,12 +59,12 @@ for line in range(len(mo)):
 
         #Creación de cartel para arpeta
         pdf_Carpeta = canvas.Canvas(
-            co[line] + "_" + title3 + ".pdf", pagesize=A5)
+            co[line] + "_" + title3 + ".pdf", pagesize=A4Carpeta)
 
-        pdf_Carpeta.setFontSize(48)
-        pdf_Carpeta.drawCentredString(595/2, 420-60, "CO: " + co[line])
-        pdf_Carpeta.drawCentredString(595/2, 420-150, modelo[line])
-        pdf_Carpeta.drawCentredString(595/2, 420-270, moFloat)
+        pdf_Carpeta.setFontSize(56)
+        pdf_Carpeta.drawCentredString(weight2/2, height2-60, "CO: " + co[line])
+        pdf_Carpeta.drawCentredString(weight2/2, height2-150, modelo[line])
+        pdf_Carpeta.drawCentredString(weight2/2, height2-270, moFloat)
         #pdf_Carpeta.drawCentredString(595/2, 420-390, pais)
         pdf_Carpeta.save()
 
