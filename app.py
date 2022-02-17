@@ -22,7 +22,7 @@ if not os.path.exists(pathDestino):
 
 excel = "SEGUIMIENTO_PEDIDOS.xlsm"
 
-df = pd.read_excel(io= "SEGUIMIENTO_PEDIDOS.xlsm", sheet_name= "DV")
+df = pd.read_excel(excel, sheet_name= "AHU")
 
 excel_observaciones = openpyxl.load_workbook("OBSERVACIONES PEDIDOS.xlsx")
 sheet1_observaciones = excel_observaciones.active
@@ -40,6 +40,18 @@ mo = df["MO no"].values
 modelo = df["CO Item no"].values
 status = df["MO sts"].values
 fecha = df["MO Start"].values
+pais = df["Country"].values
+
+language = {
+    "CZ" : "REP. CHECA",
+    "ES" : "ESPAÑA",
+    "FR" : "FRANCIA",
+    "GB" : "REINO UNIDO",
+    "GR" : "GRECIA",
+    "MA" : "MARRUECOS",
+    "PT" : "PORTUGAL",
+    "US" : "ESTADOS UNIDOS"
+}
 
 for line in range(len(mo)):
     if status[line] != "90-90":
@@ -53,8 +65,8 @@ for line in range(len(mo)):
             weight/2, height - 220, "PEDIDO: " + co[line])
         pdf_Puertas.drawCentredString(weight/2, height - 340, moFloat)
         pdf_Puertas.drawCentredString(weight/2, height - 460, modelo[line])
-        pdf_Puertas.setFontSize(30)
-        #pdf_Puertas.drawCentredString(weight/2, height - 580, pais)
+        pdf_Puertas.setFontSize(50)
+        pdf_Puertas.drawCentredString(weight/2, height - 580, language[pais[line]])
         pdf_Puertas.save()
 
         #Creación de cartel para perfiles
@@ -67,8 +79,8 @@ for line in range(len(mo)):
             weight/2, height - 220, "PEDIDO: " + co[line])
         pdf_Perfiles.drawCentredString(weight/2, height - 340, moFloat)
         pdf_Perfiles.drawCentredString(weight/2, height - 460, modelo[line])
-        pdf_Perfiles.setFontSize(30)
-        #pdf_Perfiles.drawCentredString(weight/2, height - 580, pais)
+        pdf_Perfiles.setFontSize(50)
+        pdf_Perfiles.drawCentredString(weight/2, height - 580, language[pais[line]])
         pdf_Perfiles.save()
 
         #Creación de cartel para arpeta
@@ -79,7 +91,7 @@ for line in range(len(mo)):
         pdf_Carpeta.drawCentredString(weight2/2, height2-60, "CO: " + co[line])
         pdf_Carpeta.drawCentredString(weight2/2, height2-150, modelo[line])
         pdf_Carpeta.drawCentredString(weight2/2, height2-270, moFloat)
-        #pdf_Carpeta.drawCentredString(595/2, 420-390, pais)
+        pdf_Carpeta.drawCentredString(weight2/2, height2-390, language[pais[line]])
         pdf_Carpeta.save()
 
         celdaA4_observaciones = sheet1_observaciones.cell(row=4, column=1)
@@ -88,6 +100,8 @@ for line in range(len(mo)):
         celdaC4_observaciones.value = modelo[line]
         celdaD4_observaciones = sheet1_observaciones.cell(row=4, column=4)
         celdaD4_observaciones.value = mo[line]
+        celdaE4_observaciones = sheet1_observaciones.cell(row= 4, column=5)
+        celdaE4_observaciones.value = language[pais[line]]
         excel_observaciones.save(pathDestino + co[line] + "_OBSERVACIONES.xlsx")
 
         celdaB4_protocolo = sheet1_protocolo.cell(row=4, column=2)
