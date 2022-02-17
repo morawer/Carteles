@@ -7,34 +7,38 @@ import openpyxl
 A4 = [841, 595]
 A4Carpeta = [595, 841]
 
-weight = 841
-height = 595
+ancho = 841
+alto = 595
 
-weight2 = 595
-height2 = 841
+ancho2 = 595
+alto2 = 841
 
+
+#Destino carpeta de los PDF y Excel creado.
 pathDestino = "U:/OPERACIONES/08 FÁBRICA/1 AUTOMATIZACIÓN CARTELES TRABAJO JEFES TURNO/"
 
+#Si no existe la capreta de destino, se crea automaticamente.
 if not os.path.exists(pathDestino):
     os.makedirs(pathDestino)
 
 #Input a traves de un archivo de Excel
-
 excel = "SEGUIMIENTO_PEDIDOS.xlsm"
-
 df = pd.read_excel(excel, sheet_name= "AHU")
 
+#Plantilla Excel de hoja de observaciones.
 excel_observaciones = openpyxl.load_workbook("OBSERVACIONES PEDIDOS.xlsx")
 sheet1_observaciones = excel_observaciones.active
 
+#Plantilla Excel del protocolo de inspección
 excel_protocolo = openpyxl.load_workbook("CL - Autocontrol Producción DV - Ed. 02.xlsx")
 sheet1_protocolo = excel_protocolo.active
 
 #Títulos de carteles
-title = "PANELES Y PUERTAS"
-title2 = "PERFILES"
-title3 = "CARPETA"
+titulo = "PANELES Y PUERTAS"
+titulo2 = "PERFILES"
+titulo3 = "CARPETA"
 
+#En el Excel "SEGUIMIENTO_PEDIDOS.xlsm" recojemos en variable los valores de cada columna que necesitamos.
 co = df["Unit"].values
 mo = df["MO no"].values
 modelo = df["CO Item no"].values
@@ -42,7 +46,8 @@ status = df["MO sts"].values
 fecha = df["MO Start"].values
 pais = df["Country"].values
 
-language = {
+#Creamos un diccionario "ISO2 : Nombre de país".
+isoPais = {
     "AF":"Afganistán",
 	"AL":"Albania",
 	"DE":"Alemania",
@@ -290,6 +295,7 @@ language = {
 	"ZM":"Zambia",
 }
 
+#Leemos todo el Excel por cada linea/fila de columna de MO.
 for line in range(len(mo)):
     if status[line] != "90-90":
         moFloat = f"MO: {mo[line]:.0f}"
@@ -297,40 +303,41 @@ for line in range(len(mo)):
         pdf_Puertas = canvas.Canvas(pathDestino + co[line] + "_" + "PUERTAS" + ".pdf", pagesize=A4)
 
         pdf_Puertas.setFontSize(66)
-        pdf_Puertas.drawCentredString(weight/2, height - 100, title)
+        pdf_Puertas.drawCentredString(ancho/2, alto - 100, titulo)
         pdf_Puertas.drawCentredString(
-            weight/2, height - 220, "PEDIDO: " + co[line])
-        pdf_Puertas.drawCentredString(weight/2, height - 340, moFloat)
-        pdf_Puertas.drawCentredString(weight/2, height - 460, modelo[line])
+            ancho/2, alto - 220, "PEDIDO: " + co[line])
+        pdf_Puertas.drawCentredString(ancho/2, alto - 340, moFloat)
+        pdf_Puertas.drawCentredString(ancho/2, alto - 460, modelo[line])
         pdf_Puertas.setFontSize(50)
-        pdf_Puertas.drawCentredString(weight/2, height - 580, language[pais[line]])
+        pdf_Puertas.drawCentredString(ancho/2, alto - 580, isoPais[pais[line]])
         pdf_Puertas.save()
 
         #Creación de cartel para perfiles
         pdf_Perfiles = canvas.Canvas(
-            pathDestino + co[line] + "_" + title2 + ".pdf", pagesize=A4)
+            pathDestino + co[line] + "_" + titulo2 + ".pdf", pagesize=A4)
 
         pdf_Perfiles.setFontSize(66)
-        pdf_Perfiles.drawCentredString(weight/2, height - 100, title2)
+        pdf_Perfiles.drawCentredString(ancho/2, alto - 100, titulo2)
         pdf_Perfiles.drawCentredString(
-            weight/2, height - 220, "PEDIDO: " + co[line])
-        pdf_Perfiles.drawCentredString(weight/2, height - 340, moFloat)
-        pdf_Perfiles.drawCentredString(weight/2, height - 460, modelo[line])
+            ancho/2, alto - 220, "PEDIDO: " + co[line])
+        pdf_Perfiles.drawCentredString(ancho/2, alto - 340, moFloat)
+        pdf_Perfiles.drawCentredString(ancho/2, alto - 460, modelo[line])
         pdf_Perfiles.setFontSize(50)
-        pdf_Perfiles.drawCentredString(weight/2, height - 580, language[pais[line]])
+        pdf_Perfiles.drawCentredString(ancho/2, alto - 580, isoPais[pais[line]])
         pdf_Perfiles.save()
 
         #Creación de cartel para arpeta
         pdf_Carpeta = canvas.Canvas(
-            pathDestino + co[line] + "_" + title3 + ".pdf", pagesize=A4Carpeta)
+            pathDestino + co[line] + "_" + titulo3 + ".pdf", pagesize=A4Carpeta)
 
         pdf_Carpeta.setFontSize(56)
-        pdf_Carpeta.drawCentredString(weight2/2, height2-60, "CO: " + co[line])
-        pdf_Carpeta.drawCentredString(weight2/2, height2-150, modelo[line])
-        pdf_Carpeta.drawCentredString(weight2/2, height2-270, moFloat)
-        pdf_Carpeta.drawCentredString(weight2/2, height2-390, language[pais[line]])
+        pdf_Carpeta.drawCentredString(ancho2/2, alto2-60, "CO: " + co[line])
+        pdf_Carpeta.drawCentredString(ancho2/2, alto2-150, modelo[line])
+        pdf_Carpeta.drawCentredString(ancho2/2, alto2-270, moFloat)
+        pdf_Carpeta.drawCentredString(ancho2/2, alto2-390, isoPais[pais[line]])
         pdf_Carpeta.save()
-
+        
+        #Creacion de Excel "Observaciones" y relleno de los datos en celdas.
         celdaA4_observaciones = sheet1_observaciones.cell(row=4, column=1)
         celdaA4_observaciones.value = co[line]
         celdaC4_observaciones = sheet1_observaciones.cell(row=4, column=3)
@@ -338,9 +345,11 @@ for line in range(len(mo)):
         celdaD4_observaciones = sheet1_observaciones.cell(row=4, column=4)
         celdaD4_observaciones.value = mo[line]
         celdaE4_observaciones = sheet1_observaciones.cell(row= 4, column=5)
-        celdaE4_observaciones.value = language[pais[line]]
+        celdaE4_observaciones.value = isoPais[pais[line]]
+        
         excel_observaciones.save(pathDestino + co[line] + "_OBSERVACIONES.xlsx")
 
+        #Creacion de Excel "Protocolo de Inspección" y relleno de los datos en celdas.
         celdaB4_protocolo = sheet1_protocolo.cell(row=4, column=2)
         celdaB4_protocolo.value = co[line]
         celdaC4_protocolo = sheet1_protocolo.cell(row= 4, column=4)
@@ -349,5 +358,6 @@ for line in range(len(mo)):
         celdaB5_protocolo.value = modelo[line]
         
         excel_protocolo.save(pathDestino + co[line] + "_PROTOCOLO.xlsx")
-
+        
+        #Imprimimos por consola la C0, MO y modelo de AHU de cada linea de pedido.
         print(co[line] + " >> " + moFloat + " >> " + modelo [line])
