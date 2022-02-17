@@ -297,6 +297,8 @@ isoPais = {
 
 #Leemos todo el Excel por cada linea/fila de columna de MO.
 for line in range(len(mo)):
+    
+    #Creamos la condición de solo trabajar con lineas de status diferente a "90-90"
     if status[line] != "90-90":
         moFloat = f"MO: {mo[line]:.0f}"
         #Creación de cartel para puertas y paneles
