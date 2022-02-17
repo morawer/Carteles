@@ -7,6 +7,7 @@ import openpyxl
 A4 = [841, 595]
 A4Carpeta = [595, 841]
 
+#Medidas de ancho y alto de las hojas para posicionar los textos en hojas apaisadas o en vertical.
 ancho = 841
 alto = 595
 
