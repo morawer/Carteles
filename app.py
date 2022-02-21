@@ -14,7 +14,6 @@ alto = 595
 ancho2 = 595
 alto2 = 841
 
-
 #Destino carpeta de los PDF y Excel creado.
 pathDestino = "U:/OPERACIONES/08 FÁBRICA/1 AUTOMATIZACIÓN CARTELES TRABAJO JEFES TURNO/"
 
@@ -26,8 +25,6 @@ if not os.path.exists(pathDestino):
 #excel = "SEGUIMIENTO_PEDIDOS.xlsm"
 excel = "U:/OPERACIONES/05 PLANIFICACIÓN/SEGUIMIENTO_PEDIDOS_V04.xlsm"
 df = pd.read_excel(excel, sheet_name= "AHU", skiprows=1)
-
-print(df.head())
 
 #Plantilla Excel de hoja de observaciones.
 excel_observaciones = openpyxl.load_workbook("OBSERVACIONES PEDIDOS.xlsx")
