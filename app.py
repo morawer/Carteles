@@ -23,8 +23,11 @@ if not os.path.exists(pathDestino):
     os.makedirs(pathDestino)
 
 #Input a traves de un archivo de Excel
-excel = "SEGUIMIENTO_PEDIDOS.xlsm"
-df = pd.read_excel(excel, sheet_name= "AHU")
+#excel = "SEGUIMIENTO_PEDIDOS.xlsm"
+excel = "U:/OPERACIONES/05 PLANIFICACIÓN/SEGUIMIENTO_PEDIDOS_V04.xlsm"
+df = pd.read_excel(excel, sheet_name= "AHU", skiprows=1)
+
+print(df.head())
 
 #Plantilla Excel de hoja de observaciones.
 excel_observaciones = openpyxl.load_workbook("OBSERVACIONES PEDIDOS.xlsx")
@@ -362,4 +365,4 @@ for line in range(len(mo)):
         excel_protocolo.save(pathDestino + co[line] + "_PROTOCOLO.xlsx")
         
         #Imprimimos por consola la C0, MO y modelo de AHU de cada linea de pedido.
-        print(co[line] + " >> " + moFloat + " >> " + modelo[line] + " >> " +isoPais[pais[line]])
+        print(co[line] + " >> " + moFloat + " >> " + modelo[line] + " >> " + isoPais[pais[line]])
