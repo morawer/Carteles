@@ -24,7 +24,7 @@ if not os.path.exists(pathDestino):
 
 #Input a traves de un archivo de Excel
 excel = "SEGUIMIENTO_PEDIDOS.xlsm"
-df = pd.read_excel(excel, sheet_name= "AHU")
+df = pd.read_excel(excel, sheet_name= "AHU", skiprows=1)
 
 #Plantilla Excel de hoja de observaciones.
 excel_observaciones = openpyxl.load_workbook("OBSERVACIONES PEDIDOS.xlsx")
