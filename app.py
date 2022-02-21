@@ -314,7 +314,6 @@ for line in range(len(mo)):
         pdf_Puertas.setFontSize(50)
         pdf_Puertas.drawCentredString(ancho/2, alto - 580, isoPais[pais[line]])
         pdf_Puertas.save()
-
         #Creación de cartel para perfiles
         pdf_Perfiles = canvas.Canvas(
             pathDestino + co[line] + "_" + titulo2 + ".pdf", pagesize=A4)
@@ -363,4 +362,4 @@ for line in range(len(mo)):
         excel_protocolo.save(pathDestino + co[line] + "_PROTOCOLO.xlsx")
         
         #Imprimimos por consola la C0, MO y modelo de AHU de cada linea de pedido.
-        print(co[line] + " >> " + moFloat + " >> " + modelo [line])
+        print(co[line] + " >> " + moFloat + " >> " + modelo[line] + " >> " +isoPais[pais[line]])
