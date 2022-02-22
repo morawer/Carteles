@@ -313,26 +313,26 @@ for line in range(len(mo)):
         #Creación de cartel para puertas y paneles
         pdf_Puertas = canvas.Canvas(pathDestino + co[line] + "_" + "PUERTAS" + ".pdf", pagesize=A4)
 
-        pdf_Puertas.setFontSize(66)
+        pdf_Puertas.setFont('Helvetica-Bold', 72)
         pdf_Puertas.drawCentredString(ancho/2, alto - 100, titulo)
         pdf_Puertas.drawCentredString(
             ancho/2, alto - 220, "PEDIDO: " + co[line])
         pdf_Puertas.drawCentredString(ancho/2, alto - 340, moFloat)
         pdf_Puertas.drawCentredString(ancho/2, alto - 460, modelo[line])
-        pdf_Puertas.setFontSize(50)
+        pdf_Puertas.setFont('Helvetica-Bold', 60)
         pdf_Puertas.drawCentredString(ancho/2, alto - 580, isoPais[pais[line]])
         pdf_Puertas.save()
         #Creación de cartel para perfiles
         pdf_Perfiles = canvas.Canvas(
             pathDestino + co[line] + "_" + titulo2 + ".pdf", pagesize=A4)
 
-        pdf_Perfiles.setFontSize(66)
+        pdf_Perfiles.setFont('Helvetica-Bold', 72)
         pdf_Perfiles.drawCentredString(ancho/2, alto - 100, titulo2)
         pdf_Perfiles.drawCentredString(
             ancho/2, alto - 220, "PEDIDO: " + co[line])
         pdf_Perfiles.drawCentredString(ancho/2, alto - 340, moFloat)
         pdf_Perfiles.drawCentredString(ancho/2, alto - 460, modelo[line])
-        pdf_Perfiles.setFontSize(50)
+        pdf_Perfiles.setFont('Helvetica-Bold', 60)
         pdf_Perfiles.drawCentredString(ancho/2, alto - 580, isoPais[pais[line]])
         pdf_Perfiles.save()
 
@@ -340,7 +340,7 @@ for line in range(len(mo)):
         pdf_Carpeta = canvas.Canvas(
             pathDestino + co[line] + "_" + titulo3 + ".pdf", pagesize=A4Carpeta)
 
-        pdf_Carpeta.setFontSize(56)
+        pdf_Carpeta.setFont('Helvetica-Bold', 50)
         pdf_Carpeta.drawCentredString(ancho2/2, alto2-60, "CO: " + co[line])
         pdf_Carpeta.drawCentredString(ancho2/2, alto2-150, modelo[line])
         pdf_Carpeta.drawCentredString(ancho2/2, alto2-270, moFloat)
