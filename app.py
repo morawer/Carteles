@@ -4,11 +4,12 @@ import os
 import openpyxl
 import msvcrt
 
-msg = "Hola, para que el programa funcione correctamente y genere todos los carteles debemos: \n	1. Que las plantillas OBSERVACIONES PEDIDOS.xlsx y CL - Autocontrol Producción DV - Ed. 02.xlsx esten en el mismo direcorio que el .exe\n	2.No tener abierto ningun cartel, protocolo u hoja de observacioes abierta."
+msg = '''\n Hola, para que el programa funcione correctamente y genere todos los carteles debemos: \n
+	1. Que las plantillas OBSERVACIONES PEDIDOS.xlsx y CL - Autocontrol Producción DV - Ed. 02.xlsx esten en el mismo direcorio que el .exe\n	
+	2.No tener abierto ningun cartel, protocolo u hoja de observaciones abierta.
+	\n \n >>>>> Presione una tecla para continuar...'''
 
 print(msg)
-print()
-print("Presione una tecla para continuar...")
 msvcrt.getch()
 
 #Tamaño de hojas
