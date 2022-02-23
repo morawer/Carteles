@@ -4,13 +4,18 @@ import os
 import openpyxl
 import msvcrt
 
-msg = '''\n Hola, para que el programa funcione correctamente y genere todos los carteles debemos tener en cuenta que: \n
+#Declaración de funciones
+def msg_inicio():
+    msg = '''\n Hola, para que el programa funcione correctamente y genere todos los carteles debemos tener en cuenta que: \n
     1. Las plantillas OBSERVACIONES PEDIDOS.xlsx y CL - Autocontrol Producción DV - Ed. 02.xlsx esten en el mismo direcorio que el .exe\n	
     2. No tener abierto ningun cartel, protocolo u hoja de observaciones abierta.
     \n \n >>>>> Presione una tecla para continuar...'''
-
-print(msg)
-msvcrt.getch()
+    print(msg)
+    msvcrt.getch()
+def msg_error(co, line, tipo):
+    print("======================================================================")
+    print("|>>> ERROR AL CREAR ==> " + co[line] + "_" + tipo + " <<<|")
+    print("======================================================================")
 
 #Tamaño de hojas
 A4 = [841, 595]
@@ -26,6 +31,7 @@ alto2 = 841
 #Destino carpeta de los PDF y Excel creado.
 pathDestino = "U:/OPERACIONES/08 FÁBRICA/1 AUTOMATIZACIÓN CARTELES TRABAJO JEFES TURNO/"
 
+msg_inicio()
 #Si no existe la capreta de destino, se crea automaticamente.
 if not os.path.exists(pathDestino):
     os.makedirs(pathDestino)
@@ -306,7 +312,6 @@ isoPais = {
 
 #Leemos todo el Excel por cada linea/fila de columna de MO.
 for line in range(len(mo)):
-    
     #Creamos la condición de solo trabajar con lineas de status diferente a "90-90"
     if status[line] != "90-90":
         moFloat = f"MO: {mo[line]:.0f}"
@@ -322,7 +327,7 @@ for line in range(len(mo)):
             pdf_Puertas.drawCentredString(ancho/2, alto - 580, isoPais[pais[line]])
             pdf_Puertas.save()
         except:
-            print(">>> ERROR AL CREAR ==> " + co[line] + "_" + "PUERTAS" + ".pdf <<<" )
+            msg_error(co, line, "PUERTAS.pdf")
 
         #Creación de cartel para perfiles
         try:
@@ -337,8 +342,7 @@ for line in range(len(mo)):
             pdf_Perfiles.drawCentredString(ancho/2, alto - 580, isoPais[pais[line]])
             pdf_Perfiles.save()
         except:
-            print(">>> ERROR AL CREAR ==> " + co[line] + "_" + "PERFILES" + ".pdf <<<" )
-
+            msg_error(co, line, "PERFILES.pdf")
 
         #Creación de cartel para arpeta
         try:
@@ -351,7 +355,7 @@ for line in range(len(mo)):
             pdf_Carpeta.drawCentredString(ancho2/2, alto2-390, isoPais[pais[line]])
             pdf_Carpeta.save()
         except:
-            print(">>> ERROR AL CREAR ==> " + co[line] + "_" + "CARPETA" + ".pdf <<<" )
+            msg_error(co, line, "CARPETA.pdf")
 
         #Creacion de Excel "Observaciones" y relleno de los datos en celdas.
         try:
@@ -365,8 +369,8 @@ for line in range(len(mo)):
             celdaE4_observaciones.value = isoPais[pais[line]]
             excel_observaciones.save(pathDestino + co[line] + "_OBSERVACIONES.xlsx")
         except:
-            print(">>> ERROR AL CREAR ==> " + co[line] + "_" + "OBSERVACIONES" + ".xlsx <<<" )
-
+            msg_error(co, line, "OBSERVACIONES.xlsx")
+            
         #Creacion de Excel "Protocolo de Inspección" y relleno de los datos en celdas.
         try:
             celdaB4_protocolo = sheet1_protocolo.cell(row=4, column=2)
@@ -377,7 +381,7 @@ for line in range(len(mo)):
             celdaB5_protocolo.value = modelo[line]
             excel_protocolo.save(pathDestino + co[line] + "_PROTOCOLO.xlsx")
         except:
-            print(">>> ERROR AL CREAR ==> " + co[line] + "_" + "PROTOCOLO" + ".xlsm <<<" )
-        
+            msg_error(co, line, "PROTOCOLO.xlsx")
+
         #Imprimimos por consola la C0, MO y modelo de AHU de cada linea de pedido.
         print(co[line] + " >> " + moFloat + " >> " + modelo[line] + " >> " + isoPais[pais[line]])
