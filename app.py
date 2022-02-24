@@ -4,8 +4,8 @@ import os
 import openpyxl
 import msvcrt
 
-#Declaración de funciones
-def msg_inicio():
+#Function declaration
+def msg_init():
     msg = '''\n Hola, para que el programa funcione correctamente y genere todos los carteles debemos tener en cuenta que: \n
     1. Las plantillas OBSERVACIONES PEDIDOS.xlsx y CL - Autocontrol Producción DV - Ed. 02.xlsx esten en el mismo direcorio que el .exe\n	
     2. No tener abierto ningun cartel, protocolo u hoja de observaciones abierta.
@@ -17,52 +17,52 @@ def msg_error(co, line, tipo):
     print("|>>> ERROR AL CREAR ==> " + co[line] + "_" + tipo + " <<<|")
     print("======================================================================")
 
-#Tamaño de hojas
-A4 = [841, 595]
-A4Carpeta = [595, 841]
+#Sheets sizes#widht
+width = 841
+height = 595
 
-#Medidas de ancho y alto de las hojas para posicionar los textos en hojas apaisadas o en vertical.
-ancho = 841
-alto = 595
+width2 = 595
+height2 = 841
 
-ancho2 = 595
-alto2 = 841
+A4 = [width, height]
+A4Folder = [width2, height2]
 
-#Destino carpeta de los PDF y Excel creado.
-pathDestino = "U:/OPERACIONES/08 FÁBRICA/1 AUTOMATIZACIÓN CARTELES TRABAJO JEFES TURNO/"
+#Destination folder of PDF and Excel files created
+pathDestination = "U:/OPERACIONES/08 FÁBRICA/1 AUTOMATIZACIÓN CARTELES TRABAJO JEFES TURNO/"
 
-msg_inicio()
-#Si no existe la capreta de destino, se crea automaticamente.
-if not os.path.exists(pathDestino):
-    os.makedirs(pathDestino)
+msg_init()
 
-#Input a traves de un archivo de Excel
+#If destination folder does not exist, the folder is created automatically
+if not os.path.exists(pathDestination):
+    os.makedirs(pathDestination)
+
+#The info input is trough of excel file
 excel = "U:/OPERACIONES/05 PLANIFICACIÓN/SEGUIMIENTO_PEDIDOS_V04.xlsm"
 df = pd.read_excel(excel, sheet_name= "AHU", skiprows=1)
 
-#Plantilla Excel de hoja de observaciones.
+#Excel template
 excel_observaciones = openpyxl.load_workbook("OBSERVACIONES PEDIDOS.xlsx")
 sheet1_observaciones = excel_observaciones.active
 
-#Plantilla Excel del protocolo de inspección
+#Excel template
 excel_protocolo = openpyxl.load_workbook("CL - Autocontrol Producción DV - Ed. 02.xlsx")
 sheet1_protocolo = excel_protocolo.active
 
-#Títulos de carteles
-titulo = "PANELES Y PUERTAS"
-titulo2 = "PERFILES"
-titulo3 = "CARPETA"
+#Posters titles
+title = "PANELES Y PUERTAS"
+title2 = "PERFILES"
+title3 = "CARPETA"
 
-#En el Excel "SEGUIMIENTO_PEDIDOS.xlsm" recojemos en variable los valores de cada columna que necesitamos.
+#In "SEGUIMIENTO_PEDIDOS.xlsm" file we get in variables the differents columns values we need.
 co = df["Unit"].values
 mo = df["MO no"].values
-modelo = df["CO Item no"].values
+model = df["CO Item no"].values
 status = df["MO sts"].values
-fecha = df["MO Start"].values
-pais = df["Country"].values
+date = df["MO Start"].values
+country = df["Country"].values
 
-#Creamos un diccionario "ISO2 : Nombre de país".
-isoPais = {
+#We create a dictionary "ISO2 : Country"
+isoCountry = {
     "AF":"Afganistán",
     "AL":"Albania",
     "DE":"Alemania",
@@ -310,78 +310,78 @@ isoPais = {
     "ZM":"Zambia",
 }
 
-#Leemos todo el Excel por cada linea/fila de columna de MO.
+#We read every line in "SEGUIMIENTO DE PEDIDOS" file. 
 for line in range(len(mo)):
-    #Creamos la condición de solo trabajar con lineas de status diferente a "90-90"
+    #Only need to read the status different to "90-90" lines.
     if status[line] != "90-90":
         moFloat = f"MO: {mo[line]:.0f}"
-        #Creación de cartel para puertas y paneles
+        #Creation of the poster of doors and pannels.
         try:
-            pdf_Puertas = canvas.Canvas(pathDestino + co[line] + "_" + "PUERTAS" + ".pdf", pagesize=A4)
+            pdf_Puertas = canvas.Canvas(pathDestination + co[line] + "_" + "PUERTAS" + ".pdf", pagesize=A4)
             pdf_Puertas.setFont('Helvetica-Bold', 72)
-            pdf_Puertas.drawCentredString(ancho/2, alto - 100, titulo)
-            pdf_Puertas.drawCentredString(ancho/2, alto - 220, "PEDIDO: " + co[line])
-            pdf_Puertas.drawCentredString(ancho/2, alto - 340, moFloat)
-            pdf_Puertas.drawCentredString(ancho/2, alto - 460, modelo[line])
+            pdf_Puertas.drawCentredString(width/2, height - 100, title)
+            pdf_Puertas.drawCentredString(width/2, height - 220, "PEDIDO: " + co[line])
+            pdf_Puertas.drawCentredString(width/2, height - 340, moFloat)
+            pdf_Puertas.drawCentredString(width/2, height - 460, model[line])
             pdf_Puertas.setFont('Helvetica-Bold', 60)
-            pdf_Puertas.drawCentredString(ancho/2, alto - 580, isoPais[pais[line]])
+            pdf_Puertas.drawCentredString(width/2, height - 580, isoCountry[country[line]])
             pdf_Puertas.save()
         except:
             msg_error(co, line, "PUERTAS.pdf")
 
-        #Creación de cartel para perfiles
+        #Creation of the poster of profiles.
         try:
             pdf_Perfiles = canvas.Canvas(
-            pathDestino + co[line] + "_" + titulo2 + ".pdf", pagesize=A4)
+            pathDestination + co[line] + "_" + title2 + ".pdf", pagesize=A4)
             pdf_Perfiles.setFont('Helvetica-Bold', 72)
-            pdf_Perfiles.drawCentredString(ancho/2, alto - 100, titulo2)
-            pdf_Perfiles.drawCentredString(ancho/2, alto - 220, "PEDIDO: " + co[line])
-            pdf_Perfiles.drawCentredString(ancho/2, alto - 340, moFloat)
-            pdf_Perfiles.drawCentredString(ancho/2, alto - 460, modelo[line])
+            pdf_Perfiles.drawCentredString(width/2, height - 100, title2)
+            pdf_Perfiles.drawCentredString(width/2, height - 220, "PEDIDO: " + co[line])
+            pdf_Perfiles.drawCentredString(width/2, height - 340, moFloat)
+            pdf_Perfiles.drawCentredString(width/2, height - 460, model[line])
             pdf_Perfiles.setFont('Helvetica-Bold', 60)
-            pdf_Perfiles.drawCentredString(ancho/2, alto - 580, isoPais[pais[line]])
+            pdf_Perfiles.drawCentredString(width/2, height - 580, isoCountry[country[line]])
             pdf_Perfiles.save()
         except:
             msg_error(co, line, "PERFILES.pdf")
 
-        #Creación de cartel para arpeta
+        #Creation of the poster of folder
         try:
-            pdf_Carpeta = canvas.Canvas(
-            pathDestino + co[line] + "_" + titulo3 + ".pdf", pagesize=A4Carpeta)
-            pdf_Carpeta.setFont('Helvetica-Bold', 50)
-            pdf_Carpeta.drawCentredString(ancho2/2, alto2-60, "CO: " + co[line])
-            pdf_Carpeta.drawCentredString(ancho2/2, alto2-150, modelo[line])
-            pdf_Carpeta.drawCentredString(ancho2/2, alto2-270, moFloat)
-            pdf_Carpeta.drawCentredString(ancho2/2, alto2-390, isoPais[pais[line]])
-            pdf_Carpeta.save()
+            pdf_Folder = canvas.Canvas(
+            pathDestination + co[line] + "_" + title3 + ".pdf", pagesize=A4Folder)
+            pdf_Folder.setFont('Helvetica-Bold', 50)
+            pdf_Folder.drawCentredString(width2/2, height2-60, "CO: " + co[line])
+            pdf_Folder.drawCentredString(width2/2, height2-150, model[line])
+            pdf_Folder.drawCentredString(width2/2, height2-270, moFloat)
+            pdf_Folder.drawCentredString(width2/2, height2-390, isoCountry[country[line]])
+            pdf_Folder.save()
         except:
             msg_error(co, line, "CARPETA.pdf")
 
-        #Creacion de Excel "Observaciones" y relleno de los datos en celdas.
+        #Creation of Excel and cell fill.
         try:
             celdaA4_observaciones = sheet1_observaciones.cell(row=4, column=1)
             celdaA4_observaciones.value = co[line]
             celdaC4_observaciones = sheet1_observaciones.cell(row=4, column=3)
-            celdaC4_observaciones.value = modelo[line]
+            celdaC4_observaciones.value = model[line]
             celdaD4_observaciones = sheet1_observaciones.cell(row=4, column=4)
             celdaD4_observaciones.value = mo[line]
             celdaE4_observaciones = sheet1_observaciones.cell(row= 4, column=5)
-            celdaE4_observaciones.value = isoPais[pais[line]]
-            excel_observaciones.save(pathDestino + co[line] + "_OBSERVACIONES.xlsx")
+            celdaE4_observaciones.value = isoCountry[country[line]]
+            excel_observaciones.save(pathDestination + co[line] + "_OBSERVACIONES.xlsx")
         except:
             msg_error(co, line, "OBSERVACIONES.xlsx")
             
-        #Creacion de Excel "Protocolo de Inspección" y relleno de los datos en celdas.
+        #Creation of Excel and cell fill.
         try:
             celdaB4_protocolo = sheet1_protocolo.cell(row=4, column=2)
             celdaB4_protocolo.value = co[line]
             celdaC4_protocolo = sheet1_protocolo.cell(row= 4, column=4)
             celdaC4_protocolo.value = moFloat
             celdaB5_protocolo = sheet1_protocolo.cell(row=5, column=2)
-            celdaB5_protocolo.value = modelo[line]
-            excel_protocolo.save(pathDestino + co[line] + "_PROTOCOLO.xlsx")
+            celdaB5_protocolo.value = model[line]
+            excel_protocolo.save(pathDestination + co[line] + "_PROTOCOLO.xlsx")
         except:
             msg_error(co, line, "PROTOCOLO.xlsx")
 
-        #Imprimimos por consola la C0, MO y modelo de AHU de cada linea de pedido.
-        print(co[line] + " >> " + moFloat + " >> " + modelo[line] + " >> " + isoPais[pais[line]])
+        #Print on console the CO, MO, model and country.
+        print(co[line] + " >> " + moFloat + " >> " + model[line] + " >> " + isoCountry[country[line]])
