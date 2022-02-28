@@ -14,7 +14,7 @@ def msg_init():
     msvcrt.getch()
 def msg_error(co, line, tipo):
     print("======================================================================")
-    print("|>>> ERROR AL CREAR ==> " + co[line] + "_" + tipo + " <<<|")
+    print("     |>>> ERROR AL CREAR ==> " + co[line] + "_" + tipo + " <<<|")
     print("======================================================================")
 
 #Sheets sizes#widht
@@ -385,3 +385,4 @@ for line in range(len(mo)):
 
         #Print on console the CO, MO, model and country.
         print(co[line] + " >> " + moFloat + " >> " + model[line] + " >> " + isoCountry[country[line]])
+        
