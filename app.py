@@ -1,8 +1,17 @@
-from reportlab.pdfgen import canvas
-import pandas as pd
-import os
-import openpyxl
 import msvcrt
+import os
+import tkinter as tk
+from tkinter import filedialog
+
+import openpyxl
+import pandas as pd
+from reportlab.pdfgen import canvas
+
+def fileSelection():
+    root = tk.Tk()
+    root.withdraw()
+    file_path = filedialog.askopenfilename()
+    return file_path
 
 #Function declaration
 def msg_init():
@@ -37,8 +46,8 @@ if not os.path.exists(pathDestination):
     os.makedirs(pathDestination)
 
 #The info input is trough of excel file
-excel = "U:/OPERACIONES/05 PLANIFICACIÓN/SEGUIMIENTO_PEDIDOS_V04.xlsm"
-df = pd.read_excel(excel, sheet_name= "AHU", skiprows=1)
+excel = fileSelection()
+df = pd.read_excel(excel, sheet_name= "Orders", skiprows=1)
 
 #Excel template
 excel_observaciones = openpyxl.load_workbook("OBSERVACIONES PEDIDOS.xlsx")
