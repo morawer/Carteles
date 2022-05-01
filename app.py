@@ -56,10 +56,11 @@ title3 = "CARPETA"
 #In "SEGUIMIENTO_PEDIDOS.xlsm" file we get in variables the differents columns values we need.
 co = df["Unit"].values
 mo = df["MO no"].values
-model = df["CO Item no"].values
+model = df["Item name"].values
 status = df["MO sts"].values
 date = df["MO Start"].values
 country = df["Country"].values
+type = df["Type"].values
 
 #We create a dictionary "ISO2 : Country"
 isoCountry = {
@@ -313,7 +314,7 @@ isoCountry = {
 #We read every line in "SEGUIMIENTO DE PEDIDOS" file. 
 for line in range(len(mo)):
     #Only need to read the status different to "90-90" lines.
-    if status[line] != "90-90":
+    if status[line] != "90-90" and type[line] == "AHU":
         moFloat = f"MO: {mo[line]:.0f}"
         #Creation of the poster of doors and pannels.
         try:
