@@ -399,7 +399,7 @@ for line in range(len(mo)):
             try:
                 pdf_Puertas = canvas.Canvas(pathDestination + co[line] + "_" + "BOXFAN" + ".pdf", pagesize=A4)
                 pdf_Puertas.setFont('Helvetica-Bold', 72)
-                pdf_Puertas.drawCentredString(width/2, height - 100, "BOXFAN: " + str(qty[line] + " ud"))
+                pdf_Puertas.drawCentredString(width/2, height - 100, "BOXFAN: " + str(qty[line]) + " ud")
                 pdf_Puertas.drawCentredString(width/2, height - 220, "PEDIDO: " + co[line])
                 pdf_Puertas.drawCentredString(width/2, height - 340, moFloat)
                 pdf_Puertas.drawCentredString(width/2, height - 460, model[line])
