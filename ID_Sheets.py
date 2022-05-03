@@ -70,6 +70,7 @@ status = df["MO Sts"].values
 date = df["MO Start"].values
 country = df["Country"].values
 type = df["Type"].values
+qty = df["Qty"].values
 
 #We create a dictionary "ISO2 : Country"
 isoCountry = {
@@ -382,7 +383,6 @@ for line in range(len(mo)):
                 msg_error(co, line, "PROTOCOLO.xlsx")
 
         #Creation of the poster of folder
-        if type[line] == "AHU" or type[line] == "BOXFAN":
             try:
                 pdf_Folder = canvas.Canvas(
                 pathDestination + co[line] + "_" + title3 + ".pdf", pagesize=A4Folder)
@@ -394,6 +394,20 @@ for line in range(len(mo)):
                 pdf_Folder.save()
             except:
                 msg_error(co, line, "CARPETA.pdf")
+        
+        if type[line] == "BOXFAN":
+            try:
+                pdf_Puertas = canvas.Canvas(pathDestination + co[line] + "_" + "BOXFAN" + ".pdf", pagesize=A4)
+                pdf_Puertas.setFont('Helvetica-Bold', 72)
+                pdf_Puertas.drawCentredString(width/2, height - 100, "BOXFAN: " + str(qty[line] + " ud"))
+                pdf_Puertas.drawCentredString(width/2, height - 220, "PEDIDO: " + co[line])
+                pdf_Puertas.drawCentredString(width/2, height - 340, moFloat)
+                pdf_Puertas.drawCentredString(width/2, height - 460, model[line])
+                pdf_Puertas.setFont('Helvetica-Bold', 60)
+                pdf_Puertas.drawCentredString(width/2, height - 580, isoCountry[country[line]])
+                pdf_Puertas.save()
+            except:
+                msg_error(co, line, "BOXFAN.pdf")
 
         #Print on console the CO, MO, model and country.
         print(co[line] + " >> " + moFloat + " >> " + model[line] + " >> " + isoCountry[country[line]])
