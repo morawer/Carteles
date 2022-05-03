@@ -16,7 +16,7 @@ def fileSelection():
 #Function declaration
 def msg_init():
     msg = '''\n Hola, para que el programa funcione correctamente y genere todos los carteles debemos tener en cuenta que: \n
-    1. Las plantillas OBSERVACIONES PEDIDOS.xlsx y CL - Autocontrol Producción DV - Ed. 02.xlsx esten en el mismo direcorio que el .exe\n	
+    1. Las plantillas OBSERVACIONES PEDIDOS.xlsx y CL - Autocontrol Producción DV - Ed. 02.xlsx esten en el mismo directorio que el .exe\n	
     2. No tener abierto ningun cartel, protocolo u hoja de observaciones abierta.
     \n \n >>>>> Presione una tecla para continuar...'''
     print(msg)
@@ -66,7 +66,7 @@ title3 = "CARPETA"
 co = df["Unit"].values
 mo = df["MO no"].values
 model = df["Item name"].values
-status = df["MO sts"].values
+status = df["MO Sts"].values
 date = df["MO Start"].values
 country = df["Country"].values
 type = df["Type"].values
@@ -323,75 +323,77 @@ isoCountry = {
 #We read every line in "SEGUIMIENTO DE PEDIDOS" file. 
 for line in range(len(mo)):
     #Only need to read the status different to "90-90" lines.
-    if status[line] != "90-90" and type[line] == "AHU":
+    if status[line] != "90-90":
         moFloat = f"MO: {mo[line]:.0f}"
         #Creation of the poster of doors and pannels.
-        try:
-            pdf_Puertas = canvas.Canvas(pathDestination + co[line] + "_" + "PUERTAS" + ".pdf", pagesize=A4)
-            pdf_Puertas.setFont('Helvetica-Bold', 72)
-            pdf_Puertas.drawCentredString(width/2, height - 100, title)
-            pdf_Puertas.drawCentredString(width/2, height - 220, "PEDIDO: " + co[line])
-            pdf_Puertas.drawCentredString(width/2, height - 340, moFloat)
-            pdf_Puertas.drawCentredString(width/2, height - 460, model[line])
-            pdf_Puertas.setFont('Helvetica-Bold', 60)
-            pdf_Puertas.drawCentredString(width/2, height - 580, isoCountry[country[line]])
-            pdf_Puertas.save()
-        except:
-            msg_error(co, line, "PUERTAS.pdf")
+        if type[line] == "AHU":
+            try:
+                pdf_Puertas = canvas.Canvas(pathDestination + co[line] + "_" + "PUERTAS" + ".pdf", pagesize=A4)
+                pdf_Puertas.setFont('Helvetica-Bold', 72)
+                pdf_Puertas.drawCentredString(width/2, height - 100, title)
+                pdf_Puertas.drawCentredString(width/2, height - 220, "PEDIDO: " + co[line])
+                pdf_Puertas.drawCentredString(width/2, height - 340, moFloat)
+                pdf_Puertas.drawCentredString(width/2, height - 460, model[line])
+                pdf_Puertas.setFont('Helvetica-Bold', 60)
+                pdf_Puertas.drawCentredString(width/2, height - 580, isoCountry[country[line]])
+                pdf_Puertas.save()
+            except:
+                msg_error(co, line, "PUERTAS.pdf")
 
-        #Creation of the poster of profiles.
-        try:
-            pdf_Perfiles = canvas.Canvas(
-            pathDestination + co[line] + "_" + title2 + ".pdf", pagesize=A4)
-            pdf_Perfiles.setFont('Helvetica-Bold', 72)
-            pdf_Perfiles.drawCentredString(width/2, height - 100, title2)
-            pdf_Perfiles.drawCentredString(width/2, height - 220, "PEDIDO: " + co[line])
-            pdf_Perfiles.drawCentredString(width/2, height - 340, moFloat)
-            pdf_Perfiles.drawCentredString(width/2, height - 460, model[line])
-            pdf_Perfiles.setFont('Helvetica-Bold', 60)
-            pdf_Perfiles.drawCentredString(width/2, height - 580, isoCountry[country[line]])
-            pdf_Perfiles.save()
-        except:
-            msg_error(co, line, "PERFILES.pdf")
+            #Creation of the poster of profiles.
+            try:
+                pdf_Perfiles = canvas.Canvas(
+                pathDestination + co[line] + "_" + title2 + ".pdf", pagesize=A4)
+                pdf_Perfiles.setFont('Helvetica-Bold', 72)
+                pdf_Perfiles.drawCentredString(width/2, height - 100, title2)
+                pdf_Perfiles.drawCentredString(width/2, height - 220, "PEDIDO: " + co[line])
+                pdf_Perfiles.drawCentredString(width/2, height - 340, moFloat)
+                pdf_Perfiles.drawCentredString(width/2, height - 460, model[line])
+                pdf_Perfiles.setFont('Helvetica-Bold', 60)
+                pdf_Perfiles.drawCentredString(width/2, height - 580, isoCountry[country[line]])
+                pdf_Perfiles.save()
+            except:
+                msg_error(co, line, "PERFILES.pdf")
+
+            #Creation of Excel and cell fill.
+            try:
+                celdaA4_observaciones = sheet1_observaciones.cell(row=4, column=1)
+                celdaA4_observaciones.value = co[line]
+                celdaC4_observaciones = sheet1_observaciones.cell(row=4, column=3)
+                celdaC4_observaciones.value = model[line]
+                celdaD4_observaciones = sheet1_observaciones.cell(row=4, column=4)
+                celdaD4_observaciones.value = mo[line]
+                celdaE4_observaciones = sheet1_observaciones.cell(row= 4, column=5)
+                celdaE4_observaciones.value = isoCountry[country[line]]
+                excel_observaciones.save(pathDestination + co[line] + "_OBSERVACIONES.xlsx")
+            except:
+                msg_error(co, line, "OBSERVACIONES.xlsx")
+
+            #Creation of Excel and cell fill.
+            try:
+                celdaB4_protocolo = sheet1_protocolo.cell(row=4, column=2)
+                celdaB4_protocolo.value = co[line]
+                celdaC4_protocolo = sheet1_protocolo.cell(row= 4, column=4)
+                celdaC4_protocolo.value = moFloat
+                celdaB5_protocolo = sheet1_protocolo.cell(row=5, column=2)
+                celdaB5_protocolo.value = model[line]
+                excel_protocolo.save(pathDestination + co[line] + "_PROTOCOLO.xlsx")
+            except:
+                msg_error(co, line, "PROTOCOLO.xlsx")
 
         #Creation of the poster of folder
-        try:
-            pdf_Folder = canvas.Canvas(
-            pathDestination + co[line] + "_" + title3 + ".pdf", pagesize=A4Folder)
-            pdf_Folder.setFont('Helvetica-Bold', 50)
-            pdf_Folder.drawCentredString(width2/2, height2-60, "CO: " + co[line])
-            pdf_Folder.drawCentredString(width2/2, height2-150, model[line])
-            pdf_Folder.drawCentredString(width2/2, height2-270, moFloat)
-            pdf_Folder.drawCentredString(width2/2, height2-390, isoCountry[country[line]])
-            pdf_Folder.save()
-        except:
-            msg_error(co, line, "CARPETA.pdf")
-
-        #Creation of Excel and cell fill.
-        try:
-            celdaA4_observaciones = sheet1_observaciones.cell(row=4, column=1)
-            celdaA4_observaciones.value = co[line]
-            celdaC4_observaciones = sheet1_observaciones.cell(row=4, column=3)
-            celdaC4_observaciones.value = model[line]
-            celdaD4_observaciones = sheet1_observaciones.cell(row=4, column=4)
-            celdaD4_observaciones.value = mo[line]
-            celdaE4_observaciones = sheet1_observaciones.cell(row= 4, column=5)
-            celdaE4_observaciones.value = isoCountry[country[line]]
-            excel_observaciones.save(pathDestination + co[line] + "_OBSERVACIONES.xlsx")
-        except:
-            msg_error(co, line, "OBSERVACIONES.xlsx")
-            
-        #Creation of Excel and cell fill.
-        try:
-            celdaB4_protocolo = sheet1_protocolo.cell(row=4, column=2)
-            celdaB4_protocolo.value = co[line]
-            celdaC4_protocolo = sheet1_protocolo.cell(row= 4, column=4)
-            celdaC4_protocolo.value = moFloat
-            celdaB5_protocolo = sheet1_protocolo.cell(row=5, column=2)
-            celdaB5_protocolo.value = model[line]
-            excel_protocolo.save(pathDestination + co[line] + "_PROTOCOLO.xlsx")
-        except:
-            msg_error(co, line, "PROTOCOLO.xlsx")
+        if type[line] == "AHU" or type[line] == "BOXFAN":
+            try:
+                pdf_Folder = canvas.Canvas(
+                pathDestination + co[line] + "_" + title3 + ".pdf", pagesize=A4Folder)
+                pdf_Folder.setFont('Helvetica-Bold', 50)
+                pdf_Folder.drawCentredString(width2/2, height2-60, "CO: " + co[line])
+                pdf_Folder.drawCentredString(width2/2, height2-150, model[line])
+                pdf_Folder.drawCentredString(width2/2, height2-270, moFloat)
+                pdf_Folder.drawCentredString(width2/2, height2-390, isoCountry[country[line]])
+                pdf_Folder.save()
+            except:
+                msg_error(co, line, "CARPETA.pdf")
 
         #Print on console the CO, MO, model and country.
         print(co[line] + " >> " + moFloat + " >> " + model[line] + " >> " + isoCountry[country[line]])
