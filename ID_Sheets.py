@@ -58,7 +58,7 @@ excel_protocolo = openpyxl.load_workbook("CL - Autocontrol Producción DV - Ed. 
 sheet1_protocolo = excel_protocolo.active
 
 #Posters titles
-title = "PANELES Y PUERTAS"
+title = "PAN - PUE - INT"
 title2 = "PERFILES"
 title3 = "CARPETA"
 
