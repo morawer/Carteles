@@ -20,7 +20,7 @@ def msg_init():
     2. No tener abierto ningun cartel, protocolo u hoja de observaciones abierta.
     \n \n >>>>> Presione una tecla para continuar...'''
     print(msg)
-    msvcrt.getch()
+    #msvcrt.getch()
 def msg_error(co, line, tipo):
     print("======================================================================")
     print("     |>>> ERROR AL CREAR ==> " + co[line] + "_" + tipo + " <<<|")
@@ -39,6 +39,7 @@ A4Folder = [width2, height2]
 #Destination folder of PDF and Excel files created
 pathDestination = "U:/OPERACIONES/08 FÁBRICA/1 AUTOMATIZACIÓN CARTELES TRABAJO JEFES TURNO/"
 
+
 msg_init()
 
 #If destination folder does not exist, the folder is created automatically
@@ -52,10 +53,6 @@ df = pd.read_excel(excel, sheet_name= "Orders", skiprows=1)
 #Excel template
 excel_observaciones = openpyxl.load_workbook("OBSERVACIONES PEDIDOS.xlsx")
 sheet1_observaciones = excel_observaciones.active
-
-#Excel template
-excel_protocolo = openpyxl.load_workbook("CL - Autocontrol Producción DV - Ed. 02.xlsx")
-sheet1_protocolo = excel_protocolo.active
 
 #Posters titles
 title = "PAN - PUE - INT"
@@ -372,6 +369,9 @@ for line in range(len(mo)):
 
             #Creation of Excel and cell fill.
             try:
+                #Excel template
+                excel_protocolo = openpyxl.load_workbook("Plantilla_protocolo.xlsx")
+                sheet1_protocolo = excel_protocolo.active
                 celdaB4_protocolo = sheet1_protocolo.cell(row=4, column=2)
                 celdaB4_protocolo.value = co[line]
                 celdaC4_protocolo = sheet1_protocolo.cell(row= 4, column=4)
@@ -379,8 +379,10 @@ for line in range(len(mo)):
                 celdaB5_protocolo = sheet1_protocolo.cell(row=5, column=2)
                 celdaB5_protocolo.value = model[line]
                 excel_protocolo.save(pathDestination + co[line] + "_PROTOCOLO.xlsx")
-            except:
+                excel_protocolo.close()
+            except Exception as e:
                 msg_error(co, line, "PROTOCOLO.xlsx")
+                print(f"EXCEPTION: {e}")
 
         #Creation of the poster of folder
             try:
@@ -394,7 +396,7 @@ for line in range(len(mo)):
                 pdf_Folder.save()
             except:
                 msg_error(co, line, "CARPETA.pdf")
-        
+                
         if type[line] == "BOXFAN":
             try:
                 pdf_Puertas = canvas.Canvas(pathDestination + co[line] + "_" + "BOXFAN" + ".pdf", pagesize=A4)
